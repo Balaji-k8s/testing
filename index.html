@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Tracking System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-ticket-alt"></i> Ticket Tracking System</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="nav-btn" data-section="create-ticket">
+                    <i class="fas fa-plus"></i> Create Ticket
+                </button>
+                <button class="nav-btn" data-section="reports">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </button>
+            </nav>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="dashboard-header">
+                <h2>Ticket Dashboard</h2>
+                <div class="dashboard-controls">
+                    <div class="filter-group">
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">All Statuses</option>
+                            <option value="open">Open</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                        <select id="priorityFilter" class="filter-select">
+                            <option value="">All Priorities</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <select id="assigneeFilter" class="filter-select">
+                            <option value="">All Assignees</option>
+                        </select>
+                        <select id="sortBy" class="filter-select">
+                            <option value="created">Sort by Created Date</option>
+                            <option value="priority">Sort by Priority</option>
+                            <option value="status">Sort by Status</option>
+                            <option value="assignee">Sort by Assignee</option>
+                        </select>
+                    </div>
+                    <button id="clearFilters" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Clear Filters
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon open">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="openTickets">0</h3>
+                        <p>Open Tickets</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon in-progress">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="inProgressTickets">0</h3>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon resolved">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="resolvedTickets">0</h3>
+                        <p>Resolved</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon closed">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="closedTickets">0</h3>
+                        <p>Closed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tickets-container">
+                <div id="ticketsList" class="tickets-list">
+                    <!-- Tickets will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Ticket Section -->
+        <section id="create-ticket" class="section">
+            <div class="form-container">
+                <h2>Create New Ticket</h2>
+                <form id="ticketForm" class="ticket-form">
+                    <div class="form-group">
+                        <label for="ticketTitle">Ticket Title *</label>
+                        <input type="text" id="ticketTitle" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticketDescription">Description *</label>
+                        <textarea id="ticketDescription" name="description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ticketPriority">Priority *</label>
+                            <select id="ticketPriority" name="priority" required>
+                                <option value="">Select Priority</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ticketAssignee">Assignee *</label>
+                            <input type="text" id="ticketAssignee" name="assignee" required placeholder="Enter assignee name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticketCategory">Category</label>
+                        <select id="ticketCategory" name="category">
+                            <option value="">Select Category</option>
+                            <option value="bug">Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="support">Support</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileUpload">Attach Files</label>
+                        <input type="file" id="fileUpload" name="files" multiple accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif">
+                        <small>Supported formats: PDF, DOC, DOCX, TXT, JPG, PNG, GIF</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Ticket
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="section">
+            <div class="reports-container">
+                <h2>KPI Reports</h2>
+                <div class="report-controls">
+                    <button id="generateReport" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> Generate Report
+                    </button>
+                    <button id="exportReport" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+
+                <div id="reportContent" class="report-content">
+                    <div class="report-placeholder">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>Click "Generate Report" to view KPI analytics</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Ticket Detail Modal -->
+    <div id="ticketModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Ticket Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Ticket details will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="updateTicket" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Update Ticket
+                </button>
+                <button id="closeModal" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
